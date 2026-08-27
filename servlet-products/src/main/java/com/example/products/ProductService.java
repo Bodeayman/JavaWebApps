@@ -34,7 +34,7 @@ public class ProductService {
         }
         String lowerQuery = query.toLowerCase();
         return products.stream()
-                .filter(p -> p.getName() != null && p.getName().toLowerCase().contains(lowerQuery) ||
+                .filter(p -> (p.getName() != null && p.getName().toLowerCase().contains(lowerQuery)) ||
                            (p.getDescription() != null && p.getDescription().toLowerCase().contains(lowerQuery)))
                 .collect(Collectors.toList());
     }

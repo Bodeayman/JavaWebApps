@@ -440,27 +440,40 @@
                 <div class="pagination">
                     <%
                     String currentParams = request.getQueryString();
-                    String baseUrl = request.getContextPath() + "/products?";
+                    String baseUrl = request.getContextPath() + "/products";
+
                     if (currentParams != null && !currentParams.isEmpty()) {
-                        baseUrl += currentParams;
+                        baseUrl += "?" + currentParams;
                     }
 
                     if (currentPage > 1) {
+                        String prevUrl = baseUrl.replaceAll("page=\\d+", "page=" + (currentPage - 1));
+                        if (!prevUrl.contains("page=")) {
+                            prevUrl += (baseUrl.contains("?") ? "&" : "?") + "page=" + (currentPage - 1);
+                        }
             %>
-                    <a href="<%= baseUrl.replace("page=" + currentPage, "page=" + (currentPage - 1)) %>" class="nav-link">Previous</a>
+                    <a href="<%= prevUrl %>" class="nav-link">Previous</a>
                     <%
                     }
 
                     for (int i = 1; i <= totalPages; i++) {
+                        String pageUrl = baseUrl.replaceAll("page=\\d+", "page=" + i);
+                        if (!pageUrl.contains("page=")) {
+                            pageUrl += (baseUrl.contains("?") ? "&" : "?") + "page=" + i;
+                        }
                         String pageClass = i == currentPage ? "nav-link" : "nav-link";
             %>
-                    <a href="<%= baseUrl.replace("page=" + currentPage, "page=" + i) %>" class="<%= pageClass %>"><%= i %></a>
+                    <a href="<%= pageUrl %>" class="<%= pageClass %>"><%= i %></a>
                     <%
                     }
 
                     if (currentPage < totalPages) {
+                        String nextUrl = baseUrl.replaceAll("page=\\d+", "page=" + (currentPage + 1));
+                        if (!nextUrl.contains("page=")) {
+                            nextUrl += (baseUrl.contains("?") ? "&" : "?") + "page=" + (currentPage + 1);
+                        }
             %>
-                    <a href="<%= baseUrl.replace("page=" + currentPage, "page=" + (currentPage + 1)) %>" class="nav-link">Next</a>
+                    <a href="<%= nextUrl %>" class="nav-link">Next</a>
                     <%
                     }
             %>
