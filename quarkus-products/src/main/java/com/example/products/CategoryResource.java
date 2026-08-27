@@ -19,8 +19,9 @@ public class CategoryResource {
     ProductService productService;
 
     @GET
-    public List<Category> getAll() {
-        return categoryService.getAll();
+    public Response getAll() {
+        List<Category> categories = categoryService.getAll();
+        return Response.ok(categories).build();
     }
 
     @GET
