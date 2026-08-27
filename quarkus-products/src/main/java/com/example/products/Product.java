@@ -4,7 +4,9 @@ public class Product {
 
     private Long id;
     private String name;
+    private String description;
     private double price;
+    private Long categoryId;
 
     public Product() {
     }
@@ -13,6 +15,14 @@ public class Product {
         this.id = id;
         this.name = name;
         this.price = price;
+    }
+
+    public Product(Long id, String name, String description, double price, Long categoryId) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.categoryId = categoryId;
     }
 
     public Long getId() {
@@ -37,5 +47,21 @@ public class Product {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 }
