@@ -143,10 +143,10 @@ public class ProductServlet extends HttpServlet {
             response.sendRedirect(
                     request.getContextPath() + "/products"
             );
-        } catch (IllegalArgumentException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         } catch (NumberFormatException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid number format");
+        } catch (IllegalArgumentException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         }
     }
 
