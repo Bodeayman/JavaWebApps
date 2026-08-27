@@ -5,7 +5,7 @@ import java.util.List;
 
 public class CategoryService {
 
-    private final List<Category> categories = new ArrayList<>();
+    private static final List<Category> categories = new ArrayList<>();
 
     public List<Category> getAll() {
         return categories;

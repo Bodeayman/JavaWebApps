@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 public class ProductService {
 
-    private final List<Product> products = new ArrayList<>();
+    private static final List<Product> products = new ArrayList<>();
 
     public List<Product> getAll() {
         return products;
