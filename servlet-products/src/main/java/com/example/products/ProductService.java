@@ -15,19 +15,21 @@ public class ProductService {
         products.add(product);
     }
 
-    public void update(Long id, Product updatedProduct) {
+    public boolean update(Long id, Product updatedProduct) {
         for (Product product : products) {
             if (product.getId().equals(id)) {
                 product.setName(updatedProduct.getName());
                 product.setPrice(updatedProduct.getPrice());
-                return;
+                return true;
             }
         }
+
+        return false;
     }
 
-    public void delete(Long id) {
-        products.removeIf(product ->
-                product.getId().equals(id)
+    public boolean delete(Long id) {
+        return products.removeIf(
+                product -> product.getId().equals(id)
         );
     }
 }
