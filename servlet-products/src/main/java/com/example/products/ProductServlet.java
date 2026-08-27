@@ -1,6 +1,6 @@
 package com.example.products;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,114 +13,90 @@ import java.util.List;
 public class ProductServlet extends HttpServlet {
 
     private final ProductService service = new ProductService();
-    private final ObjectMapper mapper = new ObjectMapper();
 
     @Override
     protected void doGet(
             HttpServletRequest request,
-            HttpServletResponse response) throws IOException {
+            HttpServletResponse response)
+            throws ServletException, IOException {
 
         List<Product> products = service.getAll();
 
-        response.setContentType("application/json");
-        response.setStatus(HttpServletResponse.SC_OK);
+        // Make products available to the JSP
+        request.setAttribute("products", products);
 
-        mapper.writeValue(response.getWriter(), products);
+        // Render JSP
+        request.getRequestDispatcher("/products.jsp")
+                .forward(request, response);
     }
 
     @Override
     protected void doPost(
             HttpServletRequest request,
-            HttpServletResponse response) throws IOException {
+            HttpServletResponse response)
+            throws IOException {
 
-        Product product = mapper.readValue(
-                request.getReader(),
-                Product.class
+        String action = request.getParameter("action");
+
+        switch (action == null ? "" : action) {
+
+            case "update" ->
+                updateProduct(request);
+
+            case "delete" ->
+                deleteProduct(request);
+
+            default ->
+                addProduct(request);
+        }
+
+        // Prevent form resubmission and return to product list
+        response.sendRedirect(
+                request.getContextPath() + "/products"
         );
+    }
+
+    private void addProduct(HttpServletRequest request) {
+
+        Long id = Long.parseLong(
+                request.getParameter("id")
+        );
+
+        String name = request.getParameter("name");
+
+        double price = Double.parseDouble(
+                request.getParameter("price")
+        );
+
+        Product product = new Product(id, name, price);
 
         service.add(product);
-
-        response.setContentType("application/json");
-        response.setStatus(HttpServletResponse.SC_CREATED);
-
-        mapper.writeValue(response.getWriter(), product);
     }
 
-    @Override
-    protected void doPut(
-            HttpServletRequest request,
-            HttpServletResponse response) throws IOException {
+    private void updateProduct(HttpServletRequest request) {
 
-        Long id = extractId(request);
-
-        if (id == null) {
-            response.sendError(
-                    HttpServletResponse.SC_BAD_REQUEST,
-                    "Product ID is required"
-            );
-            return;
-        }
-
-        Product updatedProduct = mapper.readValue(
-                request.getReader(),
-                Product.class
+        Long id = Long.parseLong(
+                request.getParameter("id")
         );
 
-        boolean updated = service.update(id, updatedProduct);
+        String name = request.getParameter("name");
 
-        if (!updated) {
-            response.sendError(
-                    HttpServletResponse.SC_NOT_FOUND,
-                    "Product not found"
-            );
-            return;
-        }
+        double price = Double.parseDouble(
+                request.getParameter("price")
+        );
 
-        response.setContentType("application/json");
-        response.setStatus(HttpServletResponse.SC_OK);
+        Product updatedProduct
+                = new Product(id, name, price);
 
-        mapper.writeValue(response.getWriter(), updatedProduct);
+        service.update(id, updatedProduct);
     }
 
-    @Override
-    protected void doDelete(
-            HttpServletRequest request,
-            HttpServletResponse response) throws IOException {
+    private void deleteProduct(HttpServletRequest request) {
 
-        Long id = extractId(request);
+        Long id = Long.parseLong(
+                request.getParameter("id")
+        );
 
-        if (id == null) {
-            response.sendError(
-                    HttpServletResponse.SC_BAD_REQUEST,
-                    "Product ID is required"
-            );
-            return;
-        }
-
-        boolean deleted = service.delete(id);
-
-        if (!deleted) {
-            response.sendError(
-                    HttpServletResponse.SC_NOT_FOUND,
-                    "Product not found"
-            );
-            return;
-        }
-
-        response.setStatus(HttpServletResponse.SC_NO_CONTENT);
-    }
-
-    private Long extractId(HttpServletRequest request) {
-        String path = request.getPathInfo();
-
-        if (path == null || path.equals("/")) {
-            return null;
-        }
-
-        try {
-            return Long.parseLong(path.substring(1));
-        } catch (NumberFormatException e) {
-            return null;
-        }
+        service.delete(id);
     }
 }
