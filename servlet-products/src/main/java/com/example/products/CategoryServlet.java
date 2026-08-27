@@ -13,6 +13,7 @@ import java.util.List;
 public class CategoryServlet extends HttpServlet {
 
     private final CategoryService categoryService = new CategoryService();
+    private final ProductService productService = new ProductService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -32,6 +33,8 @@ public class CategoryServlet extends HttpServlet {
                     Category category = categoryService.getById(id);
                     if (category != null) {
                         request.setAttribute("category", category);
+                        List<Product> categoryProducts = productService.getByCategory(id);
+                        request.setAttribute("categoryProducts", categoryProducts);
                         request.getRequestDispatcher("/category.jsp").forward(request, response);
                     } else {
                         response.sendError(HttpServletResponse.SC_NOT_FOUND);
