@@ -1,24 +1,98 @@
 # Maven
 target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+release.properties
+.flattened-pom.xml
 
 # IntelliJ IDEA
 .idea/
 *.iml
+*.ipr
+*.iws
 
 # Eclipse
 .classpath
 .project
 .settings/
+bin/
+
+# NetBeans
+nb-configuration.xml
 
 # VS Code
 .vscode/
+.factorypath
+
+# Quarkus
+.quarkus/
 
 # Java
 *.class
+
+# Local environment
+.env
+
+# Logs
+*.log
 
 # OS files
 .DS_Store
 Thumbs.db
 
-# Logs
-*.log
+# Vim
+*.swp
+*.swo
+
+# Patch files
+*.orig
+*.rej
+
+# TLS certificates
+.certs/
+#Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+release.properties
+.flattened-pom.xml
+
+# Eclipse
+.project
+.classpath
+.settings/
+bin/
+
+# IntelliJ
+.idea
+*.ipr
+*.iml
+*.iws
+
+# NetBeans
+nb-configuration.xml
+
+# Visual Studio Code
+.vscode
+.factorypath
+
+# OSX
+.DS_Store
+
+# Vim
+*.swp
+*.swo
+
+# patch
+*.orig
+*.rej
+
+# Local environment
+.env
+
+# Plugin directory
+/.quarkus/cli/plugins/
+# TLS Certificates
+.certs/
